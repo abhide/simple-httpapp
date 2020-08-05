@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-httpapp-v1-config
+data:
+  version: v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-httpapp-v1
+  labels:
+    app: simple-httpapp-v1
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: simple-httpapp-v1
+  template:
+    metadata:
+      labels:
+        app: simple-httpapp-v1
+    spec:
+      containers:
+      - name: simple-httpapp
+        imagePullPolicy: IfNotPresent
+        image: simple-httpapp:latest
+        env:
+          - name: IS_HEALTHY
+            value: "true"
+          - name: VERSION
+            valueFrom:
+                configMapKeyRef:
+                  key: version
+                  name: simple-httpapp-v1-config
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_IP
+            valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        ports:
+        - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: simple-httpapp-v1-svc
+spec:
+  selector:
+    app: simple-httpapp-v1
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
