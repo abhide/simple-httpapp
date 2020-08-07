@@ -1,9 +1,5 @@
-CLUSTER=dev01
 IMAGE=simple-httpapp
 IMAGE_TAG=latest
-
-init:
-	kind create cluster --name=${CLUSTER}
 
 fmt:
 	go fmt ./
@@ -23,4 +19,8 @@ kindly-deploy:
 clean:
 	kind delete cluster --name=${CLUSTER}
 
-all: init fmt build kindly-push kindly-deploy
+clean-ns:
+	kubectl delete namespace v1
+	kubectl delete namespace v2
+
+all: fmt build kindly-push kindly-deploy
