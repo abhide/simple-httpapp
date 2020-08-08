@@ -11,9 +11,9 @@ kindly-push:
 	kind load docker-image ${IMAGE}:${IMAGE_TAG} --name=${CLUSTER}
 
 kindly-deploy:
-	kubectl create namespace v1
+	kubectl create namespace v1 || true
 	kubectl apply -f k8s/simpleapp-v1.yaml -n v1
-	kubectl create namespace v2
+	kubectl create namespace v2 || true
 	kubectl apply -f k8s/simpleapp-v2.yaml -n v2
 
 clean:

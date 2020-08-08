@@ -34,7 +34,7 @@ func getHealth(w http.ResponseWriter, req *http.Request) {
 		isHealthy = true
 	}
 	w.Header().Set("Content-Type", "application/json")
-	var status map[string]string
+	status := map[string]string{}
 	if !isHealthy {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		status["status"] = "unhealthy"
