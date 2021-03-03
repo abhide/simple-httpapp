@@ -1,7 +1,7 @@
 FROM golang:alpine3.12
 WORKDIR /go/src/github.com/abhide/simple-httpapp/
 COPY main.go .
-RUN go build -o simple-httpapp .
+RUN go build -o simple-httpapp ./main.go
 
 FROM alpine:3.12
 WORKDIR /root/

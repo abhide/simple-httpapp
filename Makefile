@@ -1,5 +1,6 @@
 IMAGE=simple-httpapp
 IMAGE_TAG=latest
+CLUSTER=cluster01
 
 fmt:
 	go fmt ./
